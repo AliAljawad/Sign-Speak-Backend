@@ -12,6 +12,6 @@ class VoiceSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Voice::factory()->count(20)->create();
     }
 }
