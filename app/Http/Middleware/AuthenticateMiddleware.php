@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Support\Facades\Auth;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserMidlleware
+class AuthenticateMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,8 +17,7 @@ class UserMidlleware
     public function handle(Request $request, Closure $next): Response
     {
         $user = Auth::user();
-
-        if ($user->user_role != "admin") {
+        if (!$user) {
             return response()->json([
                 "message" => "unauthorized"
             ]);
