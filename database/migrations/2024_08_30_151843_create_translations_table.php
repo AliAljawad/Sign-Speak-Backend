@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('input_data')->nullable();
             $table->text('translated_text');
             $table->string('translated_audio')->nullable();
-            $table->timestamp('translation_date')->useCurrent();
+            $table->timestamps(); 
         });
+        
     }
 
     /**

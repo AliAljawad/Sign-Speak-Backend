@@ -25,7 +25,6 @@ class TranslationFactory extends Factory
             'input_data' => $this->faker->filePath(), 
             'translated_text' => $this->faker->sentence(),
             'translated_audio' => $this->faker->filePath(), 
-            'translation_date' => now(),
         ];
     }
 }
