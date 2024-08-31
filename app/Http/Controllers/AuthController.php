@@ -42,20 +42,30 @@ class AuthController extends Controller
 
     }
 
-    public function register(Request $request){
+    public function register(Request $request) {
+        // Validate request
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
+            'user_type' => 'required|in:regular,non-verbal',
         ]);
-
+    
+        // Debugging line to check received user_type
+        \Log::info('Received user_type: ' . $request->user_type);
+    
+        // Create the user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'user_type' => $request->user_type, 
         ]);
-
+    
+        // Login the user and create token
         $token = Auth::login($user);
+    
+        // Return success response
         return response()->json([
             'status' => 'success',
             'message' => 'User created successfully',
@@ -66,6 +76,8 @@ class AuthController extends Controller
             ]
         ]);
     }
+    
+    
 
     public function logout()
     {
