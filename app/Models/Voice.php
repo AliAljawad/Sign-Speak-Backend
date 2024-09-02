@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Voice extends Model
 {
     use HasFactory;
+    public function translations()
+    {
+        return $this->hasMany(Translation::class);
+    }
 }
