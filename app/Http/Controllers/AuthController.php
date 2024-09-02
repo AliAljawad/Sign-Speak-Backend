@@ -51,8 +51,6 @@ class AuthController extends Controller
             'user_type' => 'required|in:regular,non-verbal',
         ]);
     
-        // Debugging line to check received user_type
-        \Log::info('Received user_type: ' . $request->user_type);
     
         // Create the user
         $user = User::create([
