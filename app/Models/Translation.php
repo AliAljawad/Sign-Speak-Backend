@@ -12,5 +12,9 @@ class Translation extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function voice()
+    {
+        return $this->belongsTo(Voice::class);
+    }
 
 }
