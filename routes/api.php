@@ -14,3 +14,6 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::resource('users', UserController::class);
 Route::resource('translations',TranslationController::class);
+Route::middleware('authenticate')->get('/verify-token', function () {
+    return response()->json(['valid' => true]);
+});
