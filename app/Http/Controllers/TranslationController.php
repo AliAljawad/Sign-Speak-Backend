@@ -62,6 +62,26 @@ class TranslationController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $translation = Translation::find($id);
+
+        if (!$translation) {
+            return response()->json(['message' => 'Translation not found'], 404);
+        }
+
+        // Validate the incoming request data
+        $request->validate([
+            'user_id' => 'sometimes|exists:users,id',
+            'voice_id' => 'sometimes|nullable|exists:voices,id',
+            'input_type' => 'sometimes|in:video,image,live',
+            'input_data' => 'sometimes|nullable|string',
+            'translated_text' => 'sometimes|string',
+            'translated_audio' => 'sometimes|nullable|string',
+        ]);
+
+        // Update the translation with the validated data
+        $translation->update($request->all());
+
+        return response()->json($translation);
     }
 
     /**
