@@ -14,3 +14,12 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::resource('users', UserController::class);
 Route::resource('translations',TranslationController::class);
+Route::get('/verify-token', function (Request $request) {
+    $user = Auth::user();
+    
+    if ($user) {
+        return response()->json(['valid' => true]);
+    } else {
+        return response()->json(['valid' => false], 401);
+    }
+});
