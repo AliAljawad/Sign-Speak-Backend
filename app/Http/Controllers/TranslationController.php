@@ -46,9 +46,15 @@ class TranslationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $translation = Translation::find($id);
+    
+        if (!$translation) {
+            return response()->json(['message' => 'Translation not found'], 404);
+        }
+    
+        return response()->json($translation);
     }
 
     /**
@@ -56,7 +62,6 @@ class TranslationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
     }
 
     /**
