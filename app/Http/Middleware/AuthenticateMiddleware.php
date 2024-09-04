@@ -19,7 +19,7 @@ class AuthenticateMiddleware
         if (!$user) {
             return response()->json([
                 "message" => "unauthorized"
-            ]);
+            ],Response::HTTP_UNAUTHORIZED);
         }
         return $next($request);
     }
