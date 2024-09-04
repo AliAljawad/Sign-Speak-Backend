@@ -13,6 +13,7 @@ class Translation extends Model
         'translated_text',
         'voice_id',
         'input_type',
+        'input_data',
     ];
     public function user()
     {
