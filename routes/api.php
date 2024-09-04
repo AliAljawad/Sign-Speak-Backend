@@ -10,9 +10,3 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
 });
-
-Route::get('getusers', [UserController::class, 'index']);
-Route::Post('adduser', [UserController::class, 'store']);
-Route::put('updateuser', [UserController::class, 'update']);
-Route::get('getuser', [UserController::class, 'show']);
-Route::delete('deleteuser', [UserController::class, 'destroy']);
