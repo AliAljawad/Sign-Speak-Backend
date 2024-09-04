@@ -10,6 +10,7 @@ class Translation extends Model
     use HasFactory;
     protected $fillable=[
         'user_id',
+        'translated_text'
     ];
     public function user()
     {
