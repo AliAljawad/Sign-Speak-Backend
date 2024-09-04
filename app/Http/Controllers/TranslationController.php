@@ -89,6 +89,17 @@ class TranslationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+         // Find the translation by ID
+         $translation = Translation::find($id);
+
+         if (!$translation) {
+             return response()->json(['message' => 'Translation not found'], 404);
+         }
+ 
+         // Delete the translation
+         $translation->delete();
+ 
+         return response()->json(['message' => 'Translation deleted successfully']);
+     
     }
 }
