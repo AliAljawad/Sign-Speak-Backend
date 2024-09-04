@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Translation;
 use Illuminate\Http\Request;
 
 class TranslationController extends Controller
@@ -11,7 +12,8 @@ class TranslationController extends Controller
      */
     public function index()
     {
-        //
+        $translations = Translation::all();
+        return response()->json($translations);
     }
 
     /**
