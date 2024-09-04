@@ -12,3 +12,4 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::get('getusers', [UserController::class, 'index']);
+Route::Post('adduser', [UserController::class, 'store']);
