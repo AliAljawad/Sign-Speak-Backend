@@ -14,6 +14,7 @@ class Translation extends Model
         'voice_id',
         'input_type',
         'input_data',
+        'translated_audio',
     ];
     public function user()
     {
