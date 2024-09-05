@@ -27,6 +27,7 @@ class UserFactory extends Factory
             'name' => $this->faker->userName,
             'email' => $this->faker->unique()->safeEmail,
             'password' => bcrypt('password'), // or use Hash::make('password')
+            'profile_image' => $this->faker->filePath(), 
             'user_type' => $this->faker->randomElement(['regular', 'non-verbal']),
             'created_at' => now(),
             'updated_at' => now(),
