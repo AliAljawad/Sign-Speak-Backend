@@ -22,6 +22,7 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'user_type',
+        'profile_image',
     ];
     public function translations()
     {
