@@ -15,6 +15,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::resource('users', UserController::class);
 
 Route::put('/updateUser', [UserController::class, 'update']);
+Route::get('getUser',[UserController::class,'show']);
 Route::resource('translations',TranslationController::class);
 Route::get('/verify-token', function (Request $request) {
     $user = Auth::user();
