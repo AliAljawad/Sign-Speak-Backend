@@ -56,19 +56,44 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      * */
-    public function update(Request $request)
+    public function uploadImage(Request $request)
 {
-    $user = Auth::user();
+    // Validate the request, ensuring the image is uploaded
+    $request->validate([
+        'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+    // Handle the uploaded image
+    if ($request->hasFile('profile_image')) {
+        \Log::info('Image file received');
+        $image = $request->file('profile_image');
+        $imagePath = $image->store('profile_images', 'public');
 
+        // Save the image path in the database (for example, associated with a user)
+        // Assuming you have a 'User' model
+        $user = auth()->user(); // Assuming the user is authen  ticated
+        $user->profile_image = $imagePath;
+        $user->save();
+
+        return response()->json(['message' => 'Image uploaded successfully', 'path' => $imagePath], 200);
+    }
+
+    return response()->json(['message' => 'Image upload failed'], 400);
+}
+
+public function update(Request $request)
+{
+
+    // Get the authenticated user
+    $user = Auth::user();
     try {
+        // Validate the request
         $request->validate([
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8',
-             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Update the name, email, and password if provided
+        // Update only the fields that are present in the request
         if ($request->has('name')) {
             $user->name = $request->input('name');
         }
@@ -81,20 +106,10 @@ class UserController extends Controller
             $user->password = bcrypt($request->input('password'));
         }
 
-        // Handle the image upload
-        if ($request->hasFile('profile_image')) {
-            \Log::info('Image file received');
-            $image = $request->file('profile_image');
-            $imagePath = $image->store('profile_images', 'public');
-            $user->profile_image = $imagePath;
-        } else {
-            \Log::error('No image received');
-        }
         $user->save();
 
         return response()->json(['message' => 'Profile updated successfully'], 200);
     } catch (\Exception $e) {
-        Log::error('Error updating profile: ' . $e->getMessage());
         return response()->json(['message' => 'An error occurred while updating the profile.'], 500);
     }
 }
