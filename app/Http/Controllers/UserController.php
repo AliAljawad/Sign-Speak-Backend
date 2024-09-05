@@ -5,6 +5,7 @@ use Auth;
 use Hash;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Log;
 
 class UserController extends Controller
 {
@@ -54,42 +55,49 @@ class UserController extends Controller
 
     /**
      * Update the specified resource in storage.
-     */
+     * */
     public function update(Request $request)
-    {
+{
+    $user = Auth::user();
 
-        // Get the authenticated user
-        $user = Auth::user();
-        try {
-            // Validate the request
-            $request->validate([
-                'name' => 'sometimes|string|max:255',
-                'email' => 'sometimes|string|email|max:255|unique:users,email,' . $user->id,
-                'password' => 'nullable|string|min:8',
-            ]);
+    try {
+        $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
+             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-            // Update only the fields that are present in the request
-            if ($request->has('name')) {
-                $user->name = $request->input('name');
-            }
-
-            if ($request->has('email')) {
-                $user->email = $request->input('email');
-            }
-
-            if ($request->filled('password')) {
-                $user->password = bcrypt($request->input('password'));
-            }
-
-            $user->save();
-
-            return response()->json(['message' => 'Profile updated successfully'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'An error occurred while updating the profile.'], 500);
+        // Update the name, email, and password if provided
+        if ($request->has('name')) {
+            $user->name = $request->input('name');
         }
+
+        if ($request->has('email')) {
+            $user->email = $request->input('email');
+        }
+
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->input('password'));
+        }
+
+        // Handle the image upload
+        if ($request->hasFile('profile_image')) {
+            \Log::info('Image file received');
+            $image = $request->file('profile_image');
+            $imagePath = $image->store('profile_images', 'public');
+            $user->profile_image = $imagePath;
+        } else {
+            \Log::error('No image received');
+        }
+        $user->save();
+
+        return response()->json(['message' => 'Profile updated successfully'], 200);
+    } catch (\Exception $e) {
+        Log::error('Error updating profile: ' . $e->getMessage());
+        return response()->json(['message' => 'An error occurred while updating the profile.'], 500);
     }
-
-
+}
     /**
      * Remove the specified resource from storage.
      */
