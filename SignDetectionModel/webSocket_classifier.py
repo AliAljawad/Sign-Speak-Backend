@@ -18,6 +18,11 @@ async def handle_connection(websocket, path):
         frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
         
         # Process the frame using the model
+        data_aux = []
+        x_ = []
+        y_ = []
+        
+        # Process the frame using the model
         mp_hands = mp.solutions.hands
         hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
         results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
