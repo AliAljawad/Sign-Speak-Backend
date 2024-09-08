@@ -63,7 +63,6 @@ async def predict_video(file: UploadFile = File(...)):
     temp_file = BytesIO(await file.read())
     temp_file.seek(0)
 
-    # Save video temporarily
     with open('temp_video.mp4', 'wb') as f:
         f.write(temp_file.read())
 
@@ -73,10 +72,10 @@ async def predict_video(file: UploadFile = File(...)):
 
     fps = video_capture.get(cv2.CAP_PROP_FPS)
     interval = int(fps)
+
     predictions = []
     frame_count = 0
 
-    # Process video frame by frame
     while True:
         ret, frame = video_capture.read()
         if not ret:
@@ -85,9 +84,11 @@ async def predict_video(file: UploadFile = File(...)):
         if frame_count % interval == 0:
             prediction = process_frame(frame)
             predictions.append(prediction)
-        time.sleep(1 / fps)  # Sleep to match video frame rate
+
+        # Match the frame rate of video
+        time.sleep(1 / fps)
 
     video_capture.release()
-    os.remove('temp_video.mp4')  # Remove temp file
+    os.remove('temp_video.mp4')
 
     return {"Translation": predictions}
