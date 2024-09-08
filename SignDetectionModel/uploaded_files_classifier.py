@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,File, UploadFile
 import pickle
 import mediapipe as mp
 import numpy as np
@@ -45,3 +45,11 @@ def process_frame(frame: np.ndarray) -> str:
                 return labels_dict.get(prediction[0], "Unknown")
 
     return "No hand detected"
+
+@app.post("/predict_image")
+async def predict_image(file: UploadFile = File(...)):
+    """Predict the sign language character from an uploaded image."""
+    image = np.frombuffer(await file.read(), np.uint8)  # Read the file as bytes
+    image = cv2.imdecode(image, cv2.IMREAD_COLOR)  # Decode to OpenCV format
+    prediction = process_frame(image)  # Predict the character
+    return {"Translation": prediction}
