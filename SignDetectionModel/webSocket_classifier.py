@@ -41,6 +41,10 @@ async def handle_connection(websocket, path):
                     if len(data_aux) == 42:  # Adjust if needed
                         prediction = model.predict([np.asarray(data_aux)])
                         predicted_character = labels_dict[prediction[0]]
+                        
+                                            # Send the predicted character back to the client
+                        await websocket.send(predicted_character)
+
 
 
 
