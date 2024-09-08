@@ -37,6 +37,10 @@ async def handle_connection(websocket, path):
                         y = hand_landmarks.landmark[i].y
                         data_aux.append(x - min(x_))
                         data_aux.append(y - min(y_))
+                    
+                    if len(data_aux) == 42:  # Adjust if needed
+                        prediction = model.predict([np.asarray(data_aux)])
+                        predicted_character = labels_dict[prediction[0]]
 
 
 
