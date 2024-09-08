@@ -3,6 +3,9 @@ import pickle
 import mediapipe as mp
 import numpy as np
 import cv2
+from io import BytesIO
+import os
+import time
 
 
 app=FastAPI()
@@ -53,3 +56,38 @@ async def predict_image(file: UploadFile = File(...)):
     image = cv2.imdecode(image, cv2.IMREAD_COLOR)  # Decode to OpenCV format
     prediction = process_frame(image)  # Predict the character
     return {"Translation": prediction}
+
+@app.post("/predict_video")
+async def predict_video(file: UploadFile = File(...)):
+    """Predict the sign language characters from an uploaded video."""
+    temp_file = BytesIO(await file.read())
+    temp_file.seek(0)
+
+    # Save video temporarily
+    with open('temp_video.mp4', 'wb') as f:
+        f.write(temp_file.read())
+
+    video_capture = cv2.VideoCapture('temp_video.mp4')
+    if not video_capture.isOpened():
+        return {"message": "Error opening video file"}
+
+    fps = video_capture.get(cv2.CAP_PROP_FPS)
+    interval = int(fps)
+    predictions = []
+    frame_count = 0
+
+    # Process video frame by frame
+    while True:
+        ret, frame = video_capture.read()
+        if not ret:
+            break
+        frame_count += 1
+        if frame_count % interval == 0:
+            prediction = process_frame(frame)
+            predictions.append(prediction)
+        time.sleep(1 / fps)  # Sleep to match video frame rate
+
+    video_capture.release()
+    os.remove('temp_video.mp4')  # Remove temp file
+
+    return {"Translation": predictions}
