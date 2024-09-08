@@ -34,6 +34,18 @@ while True:
 
     # Convert frame to RGB
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        # Process frame for hand landmarks
+    results = hands.process(frame_rgb)
+    if results.multi_hand_landmarks:
+        for hand_landmarks in results.multi_hand_landmarks:
+            # Draw hand landmarks
+            mp_drawing.draw_landmarks(
+                frame,  # Image to draw on
+                hand_landmarks,  # Detected hand landmarks
+                mp_hands.HAND_CONNECTIONS,  # Hand connections
+                mp_drawing_styles.get_default_hand_landmarks_style(),
+                mp_drawing_styles.get_default_hand_connections_style())
+
 
 
 
