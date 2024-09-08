@@ -18,6 +18,10 @@ model = RandomForestClassifier()
 # Train classifier
 model.fit(x_train, y_train)
 
+# Predict
+y_predict = model.predict(x_test)
+
+
 
 
 
