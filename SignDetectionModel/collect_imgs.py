@@ -22,5 +22,12 @@ for j in range(number_of_classes):
         cv2.imshow('frame', frame)
         if cv2.waitKey(25) == ord('q'):
             break
+    
+    counter = 0
+    while counter < dataset_size:
+        ret, frame = cap.read()
+        cv2.imshow('frame', frame)
+        cv2.waitKey(25)
+
 
 
