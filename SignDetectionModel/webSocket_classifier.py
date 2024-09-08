@@ -21,6 +21,17 @@ async def handle_connection(websocket, path):
         mp_hands = mp.solutions.hands
         hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
         results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        if results.multi_hand_landmarks:
+            for hand_landmarks in results.multi_hand_landmarks:
+                x_ = []
+                y_ = []
+
+                for i in range(len(hand_landmarks.landmark)):
+                    x = hand_landmarks.landmark[i].x
+                    y = hand_landmarks.landmark[i].y
+
+                    x_.append(x)
+                    y_.append(y)
 
 
 # Start the WebSocket server
