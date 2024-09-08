@@ -6,3 +6,6 @@ import numpy as np
 # Load the trained model
 model_dict = pickle.load(open('./model.p', 'rb'))
 model = model_dict['model']
+# Initialize webcam
+cap = cv2.VideoCapture(0)
+
