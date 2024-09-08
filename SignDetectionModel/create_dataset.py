@@ -16,3 +16,10 @@ for dir_ in os.listdir(DATA_DIR):
         for img_path in os.listdir(dir_path):
             img = cv2.imread(os.path.join(dir_path, img_path))
             img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            results = hands.process(img_rgb)
+            if results.multi_hand_landmarks:
+                for hand_landmarks in results.multi_hand_landmarks:
+                    data_aux = []
+                    x_ = []
+                    y_ = []
+
