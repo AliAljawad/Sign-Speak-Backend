@@ -31,3 +31,5 @@ for j in range(number_of_classes):
         cv2.imwrite(os.path.join(DATA_DIR, str(j), '{}.jpg'.format(counter)), frame)
         counter += 1
 
+cap.release()
+cv2.destroyAllWindows()
