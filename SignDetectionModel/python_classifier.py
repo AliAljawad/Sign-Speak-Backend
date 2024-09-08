@@ -67,6 +67,17 @@ while True:
                 prediction = model.predict([np.asarray(data_aux)])
                 predicted_character = labels_dict[prediction[0]]
                 print(predicted_character)
+                
+                # Draw bounding box and label
+                x1 = int(min(x_) * W) - 10
+                y1 = int(min(y_) * H) - 10
+                x2 = int(max(x_) * W) - 10
+                y2 = int(max(y_) * H) - 10
+
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
+                cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3,
+                            cv2.LINE_AA)
+
 
 
 
