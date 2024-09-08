@@ -45,6 +45,22 @@ while True:
                 mp_hands.HAND_CONNECTIONS,  # Hand connections
                 mp_drawing_styles.get_default_hand_landmarks_style(),
                 mp_drawing_styles.get_default_hand_connections_style())
+            x_ = []
+            y_ = []
+
+            # Extract and normalize hand landmark coordinates
+            for i in range(len(hand_landmarks.landmark)):
+                x = hand_landmarks.landmark[i].x
+                y = hand_landmarks.landmark[i].y
+
+                x_.append(x)
+                y_.append(y)
+
+            for i in range(len(hand_landmarks.landmark)):
+                x = hand_landmarks.landmark[i].x
+                y = hand_landmarks.landmark[i].y
+                data_aux.append(x - min(x_))
+                data_aux.append(y - min(y_))
 
 
 
