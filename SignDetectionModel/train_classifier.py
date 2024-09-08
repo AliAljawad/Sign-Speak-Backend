@@ -20,6 +20,10 @@ model.fit(x_train, y_train)
 
 # Predict
 y_predict = model.predict(x_test)
+# Evaluate model
+score = accuracy_score(y_predict, y_test)
+print('{}% of samples were classified correctly!'.format(score * 100))
+
 
 
 
