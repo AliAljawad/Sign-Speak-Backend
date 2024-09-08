@@ -79,6 +79,10 @@ while True:
                             cv2.LINE_AA)
         # Show frame
     cv2.imshow('frame', frame)
+        # Exit loop when 'q' is pressed
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
 
 
 
