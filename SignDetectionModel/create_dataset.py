@@ -27,4 +27,7 @@ for dir_ in os.listdir(DATA_DIR):
                         y = hand_landmarks.landmark[i].y
                         x_.append(x)
                         y_.append(y)
+                        data.append(data_aux)
+                        labels.append(dir_)
+
 
