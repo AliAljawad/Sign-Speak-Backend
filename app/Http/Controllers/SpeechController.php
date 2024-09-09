@@ -1,10 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
-use Http;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Log;
-
 class SpeechController extends Controller
 {
     public function generateSpeech(Request $request)
@@ -12,36 +11,38 @@ class SpeechController extends Controller
         $request->validate([
             'text' => 'required|string',
         ]);
-$text = $request->input('text');
-$voiceId = config('services.elevenLabs.voice_id');
-$apiURL = "https://api.elevenlabs.io/v1/text-to-speech/{$voiceId}";
-$apiKey = config('services.elevenLabs.api_key');
-Log::error('this is the voiceid:', [$voiceId, 'this is the api key:', $apiKey]);
 
-try{
-    
-    $response = Http::withHeaders([
-    'xi-api-key' => $apiKey,
-    'Content-Type' => 'application/json',
-    'Accept' => 'audio/mpeg',
-])->post($apiURL, [
-    'text' => $text,
-    'model_id' => 'eleven_monolingual_v1',
-    'voice_settings' => [
-        'stability' => 0,
-        'similarity_boost' => 0,
-        'style' => 0,
-        'use_speaker_boost' => true,
-    ],
-]);
+        $text = $request->input('text');
+        $voiceId = config('services.elevenLabs.voice_id');
+        $apiURL = "https://api.elevenlabs.io/v1/text-to-speech/{$voiceId}";
+        $apiKey = config('services.elevenLabs.api_key');
+        Log::error('this is the voiceid:', [$voiceId, 'this is the api key:', $apiKey]);
 
-    return response($response->body())
-        ->header('Content-Type', 'audio/mpeg')
-        ->header('Content-Disposition', 'inline; filename="speech.mp3"');
-} catch(\Exception $e) {
-    return response()->json(['error' => 'Failed to generate speech'], $response->status());
-}
+        try {
+            $response = Http::withHeaders([
+                'xi-api-key' => $apiKey,
+                'Content-Type' => 'application/json',
+                'Accept' => 'audio/mpeg',
+            ])->post($apiURL, [
+                'text' => $text,
+                'model_id' => 'eleven_monolingual_v1',
+                'voice_settings' => [
+                    'stability' => 0,
+                    'similarity_boost' => 0,
+                    'style' => 0,
+                    'use_speaker_boost' => true,
+                ],
+            ]);
 
-
-}
+            if ($response->ok()) {
+                return response($response->body())
+                    ->header('Content-Type', 'audio/mpeg')
+                    ->header('Content-Disposition', 'inline; filename="speech.mp3"');
+            } else {
+                return response()->json(['error' => 'Failed to generate speech'], $response->status());
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An error occurred while generating speech'], 500);
+        }
+    }
 }
