@@ -31,6 +31,13 @@ $response = Http::withHeaders([
         'use_speaker_boost' => true,
     ],
 ]);
+if ($response->ok()) {
+    return response($response->body())
+        ->header('Content-Type', 'audio/mpeg')
+        ->header('Content-Disposition', 'inline; filename="speech.mp3"');
+} else {
+    return response()->json(['error' => 'Failed to generate speech'], $response->status());
+}
 
 }
 }
