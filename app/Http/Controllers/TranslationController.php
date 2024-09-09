@@ -22,63 +22,72 @@ class TranslationController extends Controller
      */
     public function store(Request $request)
     {
-        $user=Auth::user();
+        // Ensure the user is authenticated
+        $this->middleware('auth:api');
+
         // Log the request for debugging
         Log::info('store request received', ['request' => $request->all()]);
+
         // Validate incoming request
-    $validatedData = $request->validate([
-    'input_type' => 'required|in:video,image,live',
-    'translated_text' => 'required|string',
-    'translated_audio' => 'nullable|file|mimes:mp3,wav',
-    'input_data' => 'nullable|file|mimes:mp4,jpg,jpeg,png|max:100000',
-]);
-// Save the input file and get the path
-$inputDataPath = null;
-if ($request->hasFile('input_data')) {
-    try {
-        $inputDataPath = $request->file('input_data')->store('uploads/input_data', 'public');
-        Log::info('Input data file uploaded', ['path' => $inputDataPath]);
-    } catch (\Exception $e) {
-        Log::error('Error uploading input data file', ['error' => $e->getMessage()]);
-        return response()->json(['error' => 'Failed to upload input file'], 500);
-    }
-}
-// Save the translated audio file and get the path
-$translatedAudioPath = null;
-if ($request->hasFile('translated_audio')) {
-    try {
-        $translatedAudioPath = $request->file('translated_audio')->store('uploads/translated_audio', 'public');
-        Log::info('Translated audio file uploaded', ['path' => $translatedAudioPath]);
-    } catch (\Exception $e) {
-        Log::error('Error uploading translated audio file', ['error' => $e->getMessage()]);
-        return response()->json(['error' => 'Failed to upload audio file'], 500);
-    }
-}
-// Create a new translation entry in the database
-try {
-    $translation = Translation::create([
-        'user_id' => $user->id,
-        'input_type' => $validatedData['input_type'],
-        'input_data' => $inputDataPath, // Save the file location
-        'translated_text' => $validatedData['translated_text'],
-        'translated_audio' => $translatedAudioPath, // Save the file location
-    ]);
+        $validatedData = $request->validate([
+            'input_type' => 'required|in:video,image,live',
+            'translated_text' => 'required|string',
+            'translated_audio' => 'nullable|file|mimes:mp3,wav',
+            'input_data' => 'nullable|file|mimes:mp4,jpg,jpeg,png|max:100000',
+        ]);
 
-    Log::info('Translation saved', ['translation' => $translation]);
-} catch (\Exception $e) {
-    Log::error('Error saving translation', ['error' => $e->getMessage()]);
-    return response()->json(['error' => 'Failed to save translation'], 500);
-}
+        // Get the authenticated user (from the JWT token)
+        $user = Auth::user();
 
-// Return a success response
-return response()->json([
-    'success' => true,
-    'message' => 'Translation saved successfully',
-    'translation' => $translation
-], 201);
+        // Log user ID
+        Log::info('Authenticated user', ['user_id' => $user->id]);
 
+        // Save the input file and get the path
+        $inputDataPath = null;
+        if ($request->hasFile('input_data')) {
+            try {
+                $inputDataPath = $request->file('input_data')->store('uploads/input_data', 'public');
+                Log::info('Input data file uploaded', ['path' => $inputDataPath]);
+            } catch (\Exception $e) {
+                Log::error('Error uploading input data file', ['error' => $e->getMessage()]);
+                return response()->json(['error' => 'Failed to upload input file'], 500);
+            }
+        }
 
+        // Save the translated audio file and get the path
+        $translatedAudioPath = null;
+        if ($request->hasFile('translated_audio')) {
+            try {
+                $translatedAudioPath = $request->file('translated_audio')->store('uploads/translated_audio', 'public');
+                Log::info('Translated audio file uploaded', ['path' => $translatedAudioPath]);
+            } catch (\Exception $e) {
+                Log::error('Error uploading translated audio file', ['error' => $e->getMessage()]);
+                return response()->json(['error' => 'Failed to upload audio file'], 500);
+            }
+        }
 
+        // Create a new translation entry in the database
+        try {
+            $translation = Translation::create([
+                'user_id' => $user->id,
+                'input_type' => $validatedData['input_type'],
+                'input_data' => $inputDataPath, // Save the file location
+                'translated_text' => $validatedData['translated_text'],
+                'translated_audio' => $translatedAudioPath, // Save the file location
+            ]);
+
+            Log::info('Translation saved', ['translation' => $translation]);
+        } catch (\Exception $e) {
+            Log::error('Error saving translation', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Failed to save translation'], 500);
+        }
+
+        // Return a success response
+        return response()->json([
+            'success' => true,
+            'message' => 'Translation saved successfully',
+            'translation' => $translation
+        ], 201);
     }
 
     /**
@@ -87,11 +96,11 @@ return response()->json([
     public function show($id)
     {
         $translation = Translation::find($id);
-    
+
         if (!$translation) {
             return response()->json(['message' => 'Translation not found'], 404);
         }
-    
+
         return response()->json($translation);
     }
 
@@ -127,17 +136,17 @@ return response()->json([
      */
     public function destroy(string $id)
     {
-         // Find the translation by ID
-         $translation = Translation::find($id);
+        // Find the translation by ID
+        $translation = Translation::find($id);
 
-         if (!$translation) {
-             return response()->json(['message' => 'Translation not found'], 404);
-         }
- 
-         // Delete the translation
-         $translation->delete();
- 
-         return response()->json(['message' => 'Translation deleted successfully']);
-     
+        if (!$translation) {
+            return response()->json(['message' => 'Translation not found'], 404);
+        }
+
+        // Delete the translation
+        $translation->delete();
+
+        return response()->json(['message' => 'Translation deleted successfully']);
+
     }
 }
