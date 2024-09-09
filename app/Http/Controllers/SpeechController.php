@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use Http;
 use Illuminate\Http\Request;
 use Log;
 
