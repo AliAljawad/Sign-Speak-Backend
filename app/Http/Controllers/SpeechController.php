@@ -17,7 +17,9 @@ $apiURL = "https://api.elevenlabs.io/v1/text-to-speech/{$voiceId}";
 $apiKey = config('services.elevenLabs.api_key');
 Log::error('this is the voiceid:', [$voiceId, 'this is the api key:', $apiKey]);
 
-$response = Http::withHeaders([
+try{
+    
+    $response = Http::withHeaders([
     'xi-api-key' => $apiKey,
     'Content-Type' => 'application/json',
     'Accept' => 'audio/mpeg',
@@ -31,13 +33,14 @@ $response = Http::withHeaders([
         'use_speaker_boost' => true,
     ],
 ]);
-if ($response->ok()) {
+
     return response($response->body())
         ->header('Content-Type', 'audio/mpeg')
         ->header('Content-Disposition', 'inline; filename="speech.mp3"');
-} else {
+} catch(\Exception $e) {
     return response()->json(['error' => 'Failed to generate speech'], $response->status());
 }
+
 
 }
 }
