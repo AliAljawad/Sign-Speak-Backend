@@ -23,6 +23,14 @@ class TranslationController extends Controller
     {
         // Log the request for debugging
         Log::info('store request received', ['request' => $request->all()]);
+        // Validate incoming request
+    $validatedData = $request->validate([
+    'input_type' => 'required|in:video,image,live',
+    'translated_text' => 'required|string',
+    'translated_audio' => 'nullable|file|mimes:mp3,wav',
+    'input_data' => 'nullable|file|mimes:mp4,jpg,jpeg,png|max:100000',
+]);
+
     }
 
     /**
