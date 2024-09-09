@@ -30,6 +30,18 @@ class TranslationController extends Controller
     'translated_audio' => 'nullable|file|mimes:mp3,wav',
     'input_data' => 'nullable|file|mimes:mp4,jpg,jpeg,png|max:100000',
 ]);
+// Save the input file and get the path
+$inputDataPath = null;
+if ($request->hasFile('input_data')) {
+    try {
+        $inputDataPath = $request->file('input_data')->store('uploads/input_data', 'public');
+        Log::info('Input data file uploaded', ['path' => $inputDataPath]);
+    } catch (\Exception $e) {
+        Log::error('Error uploading input data file', ['error' => $e->getMessage()]);
+        return response()->json(['error' => 'Failed to upload input file'], 500);
+    }
+}
+
 
     }
 
