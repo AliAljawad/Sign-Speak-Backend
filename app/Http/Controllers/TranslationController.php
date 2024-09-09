@@ -52,6 +52,22 @@ if ($request->hasFile('translated_audio')) {
         return response()->json(['error' => 'Failed to upload audio file'], 500);
     }
 }
+// Create a new translation entry in the database
+try {
+    $translation = Translation::create([
+        'user_id' => $user->id,
+        'input_type' => $validatedData['input_type'],
+        'input_data' => $inputDataPath, // Save the file location
+        'translated_text' => $validatedData['translated_text'],
+        'translated_audio' => $translatedAudioPath, // Save the file location
+    ]);
+
+    Log::info('Translation saved', ['translation' => $translation]);
+} catch (\Exception $e) {
+    Log::error('Error saving translation', ['error' => $e->getMessage()]);
+    return response()->json(['error' => 'Failed to save translation'], 500);
+}
+
 
 
 
