@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Translation;
+use Auth;
 use Illuminate\Http\Request;
 
 class TranslationController extends Controller
@@ -21,6 +22,7 @@ class TranslationController extends Controller
      */
     public function store(Request $request)
     {
+        $user=Auth::user();
         // Log the request for debugging
         Log::info('store request received', ['request' => $request->all()]);
         // Validate incoming request
