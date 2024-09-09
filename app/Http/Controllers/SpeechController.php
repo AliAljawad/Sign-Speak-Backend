@@ -7,6 +7,8 @@ class SpeechController extends Controller
 {
     public function generateSpeech(Request $request)
     {
-        // To be implemented
-    }
+        $request->validate([
+            'text' => 'required|string',
+        ]);
+
 }
