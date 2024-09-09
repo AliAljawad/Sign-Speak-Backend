@@ -41,6 +41,18 @@ if ($request->hasFile('input_data')) {
         return response()->json(['error' => 'Failed to upload input file'], 500);
     }
 }
+// Save the translated audio file and get the path
+$translatedAudioPath = null;
+if ($request->hasFile('translated_audio')) {
+    try {
+        $translatedAudioPath = $request->file('translated_audio')->store('uploads/translated_audio', 'public');
+        Log::info('Translated audio file uploaded', ['path' => $translatedAudioPath]);
+    } catch (\Exception $e) {
+        Log::error('Error uploading translated audio file', ['error' => $e->getMessage()]);
+        return response()->json(['error' => 'Failed to upload audio file'], 500);
+    }
+}
+
 
 
     }
