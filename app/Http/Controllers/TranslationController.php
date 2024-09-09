@@ -68,6 +68,12 @@ try {
     return response()->json(['error' => 'Failed to save translation'], 500);
 }
 
+// Return a success response
+return response()->json([
+    'success' => true,
+    'message' => 'Translation saved successfully',
+    'translation' => $translation
+], 201);
 
 
 
