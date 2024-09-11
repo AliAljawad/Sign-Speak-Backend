@@ -20,6 +20,7 @@ Route::post('/upload-image', [UserController::class, 'uploadImage']);
 Route::post('/speech', [SpeechController::class, 'generateSpeech']);
 Route::get('getUser',[UserController::class,'show']);
 Route::resource('translations',TranslationController::class);
+Route::get('/get-translations',[TranslationController::class,'show']);
 Route::get('/verify-token', function (Request $request) {
     $user = Auth::user();
     
