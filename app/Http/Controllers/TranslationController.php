@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Translation;
 use Auth;
 use Illuminate\Http\Request;
+use Log;
 
 class TranslationController extends Controller
 {
@@ -93,16 +94,23 @@ class TranslationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
-    {
-        $translation = Translation::find($id);
+    public function show()
+{
+    $user = Auth::user();
+    \Log::error('User ID:', ['id' => $user->id]); // Wrap id in an array
 
-        if (!$translation) {
-            return response()->json(['message' => 'Translation not found'], 404);
-        }
+    $translations = Translation::where('user_id', $user->id)->get();
 
-        return response()->json($translation);
+    if ($translations->isEmpty()) {
+        return response()->json(['message' => 'No translations found'], 404);
     }
+
+    \Log::error('Translations:', ['translations' => $translations]); // Wrap translations in an array
+    
+    return response()->json($translations);
+}
+
+    
 
     /**
      * Update the specified resource in storage.
