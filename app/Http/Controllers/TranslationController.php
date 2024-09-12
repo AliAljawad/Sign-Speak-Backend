@@ -126,7 +126,6 @@ class TranslationController extends Controller
         // Validate the incoming request data
         $request->validate([
             'user_id' => 'sometimes|exists:users,id',
-            'voice_id' => 'sometimes|nullable|exists:voices,id',
             'input_type' => 'sometimes|in:video,image,live',
             'input_data' => 'sometimes|nullable|string',
             'translated_text' => 'sometimes|string',
