@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('translations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('voice_id')->nullable()->constrained()->onDelete('set null')->onUpdate('cascade');
-            $table->enum('input_type', ['video', 'image', 'live']);
+            $table->enum('input_type', ['video', 'image']);
             $table->string('input_data')->nullable();
             $table->text('translated_text');
             $table->string('translated_audio')->nullable();
