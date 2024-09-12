@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use App\Models\Voice;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,8 +19,7 @@ class TranslationFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'voice_id' => Voice::factory(), 
-            'input_type' => $this->faker->randomElement(['video', 'image', 'live']),
+            'input_type' => $this->faker->randomElement(['video', 'image']),
             'input_data' => $this->faker->filePath(), 
             'translated_text' => $this->faker->sentence(),
             'translated_audio' => $this->faker->filePath(), 
