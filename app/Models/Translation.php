@@ -11,7 +11,6 @@ class Translation extends Model
     protected $fillable=[
         'user_id',
         'translated_text',
-        'voice_id',
         'input_type',
         'input_data',
         'translated_audio',
@@ -19,10 +18,6 @@ class Translation extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-    public function voice()
-    {
-        return $this->belongsTo(Voice::class);
     }
 
 }
