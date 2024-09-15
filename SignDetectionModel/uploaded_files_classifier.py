@@ -31,7 +31,9 @@ labels_dict = {
     'Sorry': 'Sorry',
     'Yes': 'Yes',
     'No': 'No',
-    'Home': 'Home'
+    'Home': 'Home',
+    'Walk': 'Walk',
+    'Thank you': 'Thank you',
 }
 
 
