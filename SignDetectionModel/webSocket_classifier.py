@@ -8,7 +8,18 @@ import pickle
 # Load the model
 model_dict = pickle.load(open('./model.p', 'rb'))
 model = model_dict['model']
-labels_dict = {chr(i): chr(i) for i in range(ord('A'), ord('Z') + 1)}
+labels_dict = {
+    'Hello': 'Hello',
+    'Mom': 'Mom',
+    'I': 'I',
+    'Love you': 'Love you',
+    'Please': 'Please',
+    'Sorry': 'Sorry',
+    'Yes': 'Yes',
+    'No': 'No',
+    'Home': 'Home'
+}
+
 
 # Set up the WebSocket server
 async def handle_connection(websocket, path):

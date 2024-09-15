@@ -21,8 +21,19 @@ mp_drawing = mp.solutions.drawing_utils  # Utility to draw the hands' landmarks
 mp_drawing_styles = mp.solutions.drawing_styles  # Pre-defined drawing styles for hands landmarks
 hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)  # Initialize the hand detector
 
-# Dictionary to map model predictions (A-Z) to their respective characters
-labels_dict = {chr(i): chr(i) for i in range(ord('A'), ord('Z') + 1)}
+# Define the labels for the sign language characters
+labels_dict = {
+    'Hello': 'Hello',
+    'Mom': 'Mom',
+    'I': 'I',
+    'Love you': 'Love you',
+    'Please': 'Please',
+    'Sorry': 'Sorry',
+    'Yes': 'Yes',
+    'No': 'No',
+    'Home': 'Home'
+}
+
 
 def process_frame(frame: np.ndarray) -> str:
     """Process a single frame to predict the hand sign."""
@@ -49,8 +60,7 @@ def process_frame(frame: np.ndarray) -> str:
             if len(data_aux) == 42:  # Adjust the number of landmarks as needed
                 prediction = model.predict([np.asarray(data_aux)])  # Make a prediction using the model
                 return labels_dict.get(prediction[0], "Unknown")  # Return the predicted sign character
-
-    return "No hand detected"  # Return this if no hands are detected
+        return
 
 @app.post("/predict_image")
 async def predict_image(file: UploadFile = File(...)):
