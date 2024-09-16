@@ -62,7 +62,7 @@ def process_frame(frame: np.ndarray) -> str:
             if len(data_aux) == 42:  # Adjust the number of landmarks as needed
                 prediction = model.predict([np.asarray(data_aux)])  # Make a prediction using the model
                 return labels_dict.get(prediction[0], "Unknown")  # Return the predicted sign character
-        return
+        return ""
 
 @app.post("/predict_image")
 async def predict_image(file: UploadFile = File(...)):

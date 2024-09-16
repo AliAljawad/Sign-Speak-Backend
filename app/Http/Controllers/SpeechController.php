@@ -16,7 +16,6 @@ class SpeechController extends Controller
         $voiceId = config('services.elevenLabs.voice_id');
         $apiURL = "https://api.elevenlabs.io/v1/text-to-speech/{$voiceId}";
         $apiKey = config('services.elevenLabs.api_key');
-        Log::error('this is the voiceid:', [$voiceId, 'this is the api key:', $apiKey]);
 
         try {
             $response = Http::withHeaders([
