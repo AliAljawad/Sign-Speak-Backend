@@ -19,5 +19,15 @@ class Translation extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function translatedText()
+{
+    return $this->hasOne(TranslatedText::class);
+}
+
+public function translatedAudio()
+{
+    return $this->hasOne(TranslatedAudio::class);
+}
+
 
 }

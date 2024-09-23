@@ -16,8 +16,6 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->enum('input_type', ['video', 'image','live']);
             $table->string('input_data')->nullable();
-            $table->text('translated_text');
-            $table->string('translated_audio')->nullable();
             $table->timestamps(); 
         });
         
