@@ -109,7 +109,7 @@ class TranslationController extends Controller
             'id' => $translation->id,
             'input_type' => $translation->input_type,
             'input_data' => $translation->input_data,
-            'translated_text' => $translation->translatedText,
+            'translated_text' => $translation->translatedText->text,
             'translated_audio' => $translation->translatedAudio ? $translation->translatedAudio->audio_path : null, // Actual audio path
             'created_at' => $translation->created_at,
             'updated_at' => $translation->updated_at,
