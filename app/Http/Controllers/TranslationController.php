@@ -90,23 +90,37 @@ class TranslationController extends Controller
      * Display the specified resource.
      */
     public function show()
-    {
-        $user = Auth::user();
-        \Log::error('User ID:', ['id' => $user->id]);
-    
-        // Load translations along with related translated text and audio
-        $translations = Translation::with(['translatedText', 'translatedAudio'])
-                        ->where('user_id', $user->id)
-                        ->get();
-    
-        if ($translations->isEmpty()) {
-            return response()->json(['message' => 'No translations found'], 404);
-        }
-    
-        \Log::error('Translations:', ['translations' => $translations]);
-    
-        return response()->json($translations);
+{
+    $user = Auth::user();
+    \Log::error('User ID:', ['id' => $user->id]);
+
+    // Load translations along with related translated text and audio
+    $translations = Translation::with(['translatedText', 'translatedAudio'])
+                    ->where('user_id', $user->id)
+                    ->get();
+
+    if ($translations->isEmpty()) {
+        return response()->json(['message' => 'No translations found'], 404);
     }
+
+    // Transform the translations to include only the required fields
+    $response = $translations->map(function ($translation) {
+        return [
+            'id' => $translation->id,
+            'input_type' => $translation->input_type,
+            'input_data' => $translation->input_data,
+            'translated_text' => $translation->translatedText,
+            'translated_audio' => $translation->translatedAudio ? $translation->translatedAudio->audio_path : null, // Actual audio path
+            'created_at' => $translation->created_at,
+            'updated_at' => $translation->updated_at,
+        ];
+    });
+
+    \Log::error('Translations:', ['translations' => $response]);
+
+    return response()->json($response);
+}
+
     
 
     
