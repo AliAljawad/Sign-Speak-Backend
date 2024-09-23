@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,11 +17,11 @@ class TranslationFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
-            'input_type' => $this->faker->randomElement(['video', 'image']),
-            'input_data' => $this->faker->filePath(), 
-            'translated_text' => $this->faker->sentence(),
-            'translated_audio' => $this->faker->filePath(), 
+            'user_id' => \App\Models\User::factory(), // Create a related user
+            'input_type' => $this->faker->randomElement(['video', 'image', 'live']),
+            'input_data' => $this->faker->filePath(), // Random file path
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }
